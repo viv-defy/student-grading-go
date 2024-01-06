@@ -1,8 +1,7 @@
-package main
+package student_grading
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -122,18 +121,4 @@ func findTopperPerUniversity(gs []studentStat) map[string]studentStat {
 		}
 	}
 	return universityTopper
-}
-
-func main() {
-	students := parseCSV("grades.csv")
-	fmt.Println(students)
-
-	studentStats := calculateGrade(students)
-	fmt.Println(studentStats)
-
-	topper := findOverallTopper(studentStats)
-	fmt.Println(topper)
-
-	universityTopper := findTopperPerUniversity(studentStats)
-	fmt.Println(universityTopper)
 }

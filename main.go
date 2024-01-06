@@ -1,4 +1,4 @@
-package student_grading
+package main
 
 type Grade string
 

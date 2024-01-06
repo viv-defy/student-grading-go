@@ -1,5 +1,13 @@
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
+
 type Grade string
 
 const (
@@ -21,7 +29,48 @@ type studentStat struct {
 }
 
 func parseCSV(filePath string) []student {
-	return nil
+	f, err := os.Open(filePath)
+	if err != nil {
+		panic(err)
+	}
+
+	defer f.Close()
+
+	students := []student{}
+	scanner := bufio.NewScanner(f)
+	isHeader := true
+	for scanner.Scan() {
+		studentRecord := scanner.Text()
+		if isHeader {
+			isHeader = false
+			continue
+		}
+
+		tokens := strings.Split(studentRecord, ",")
+
+		testScores := []int{}
+		for i, v := range tokens {
+			if i > 2 {
+				score, err := strconv.Atoi(v)
+				if err != nil {
+					panic(err)
+				}
+				testScores = append(testScores, score)
+			}
+		}
+
+		students = append(students, student{
+			firstName:  tokens[0],
+			lastName:   tokens[1],
+			university: tokens[2],
+			test1Score: testScores[0],
+			test2Score: testScores[1],
+			test3Score: testScores[2],
+			test4Score: testScores[3],
+		})
+	}
+
+	return students
 }
 
 func calculateGrade(students []student) []studentStat {
@@ -34,4 +83,9 @@ func findOverallTopper(gradedStudents []studentStat) studentStat {
 
 func findTopperPerUniversity(gs []studentStat) map[string]studentStat {
 	return nil
+}
+
+func main() {
+	students := parseCSV("grades.csv")
+	fmt.Println(students)
 }

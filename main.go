@@ -111,16 +111,29 @@ func findOverallTopper(gradedStudents []studentStat) studentStat {
 }
 
 func findTopperPerUniversity(gs []studentStat) map[string]studentStat {
-	return nil
+	universityTopper := make(map[string]studentStat)
+	for _, gradedStudent := range gs {
+		if topper, ok := universityTopper[gradedStudent.university]; ok {
+			if gradedStudent.finalScore > topper.finalScore {
+				universityTopper[gradedStudent.university] = gradedStudent
+			}
+		} else {
+			universityTopper[gradedStudent.university] = gradedStudent
+		}
+	}
+	return universityTopper
 }
 
 func main() {
 	students := parseCSV("grades.csv")
-	// fmt.Println(students)
+	fmt.Println(students)
 
 	studentStats := calculateGrade(students)
-	// fmt.Println(studentStats)
+	fmt.Println(studentStats)
 
 	topper := findOverallTopper(studentStats)
 	fmt.Println(topper)
+
+	universityTopper := findTopperPerUniversity(studentStats)
+	fmt.Println(universityTopper)
 }
